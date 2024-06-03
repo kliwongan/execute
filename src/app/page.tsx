@@ -13,21 +13,21 @@ export default function Home() {
     const options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: btoa(val) }),
+      body: JSON.stringify({ code: val }),
     };
     fetch(API_URL + "/test_code", options)
       .then((response) => response.json())
       .then((data) => {
         console.log("Incoming request: " + JSON.stringify(data));
-        if (data.output != undefined) {
+        if (data != undefined && data.output != undefined) {
           myDivRef.current.value = data.output;
-        } else if (data.detail != undefined) {
+        } else if (data != undefined && data.detail != undefined) {
           myDivRef.current.value = data.detail;
         }
       })
       .catch((error) => {
         console.error("Error: " + error);
-        if (data.output != undefined) {
+        if (data != undefined && data.output != undefined) {
           myDivRef.current.value = data.detail;
         }
       });
@@ -37,21 +37,21 @@ export default function Home() {
     const options = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: btoa(val) }),
+      body: JSON.stringify({ code: val }),
     };
     fetch(API_URL + "/submit_code", options)
       .then((response) => response.json())
       .then((data) => {
         console.log("Incoming request: " + JSON.stringify(data));
-        if (data.output != undefined) {
+        if (data != undefined && data.output != undefined) {
           myDivRef.current.value = data.output;
-        } else if (data.detail != undefined) {
+        } else if (data != undefined && data.detail != undefined) {
           myDivRef.current.value = data.detail;
         }
       })
       .catch((error) => {
         console.error("Error: " + error);
-        if (data.output != undefined) {
+        if (data != undefined && data.output != undefined) {
           myDivRef.current.value = data.detail;
         }
       });

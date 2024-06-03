@@ -39,14 +39,9 @@ async def root():
 
 @app.post("/test_code")
 async def test_code(params: CodeUpload):
-    return {"output": "a"}
     params = params.dict()
     code = params["code"]
     output = ""
-    try:
-        base64.b64decode(code)
-    except:
-        raise Exception("Base64 decode went wrong!")
     if check_unsafe_code(code):
         raise HTTPException(
             status_code=400,
@@ -63,14 +58,6 @@ async def test_code(params: CodeUpload):
     params = params.dict()
     code = params["code"]
     output = ""
-    try:
-        base64.b64decode(code)
-    except:
-        raise HTTPException(
-            status_code=400,
-            detail="Base64 decode went wrong!",
-            headers={"X-Error": "Base64 decode went wrong!"},
-        )
     if check_unsafe_code(code):
         raise HTTPException(
             status_code=400,

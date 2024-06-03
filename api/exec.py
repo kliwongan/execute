@@ -1,6 +1,8 @@
 # Execute code within safe sandbox
 import ast
 import resource
+import subprocess
+import os
 
 """
 Security concepts here were taken from: 
@@ -17,6 +19,9 @@ on the browser instead of in the backend
 MEMORY_LIMIT = 1
 CPU_TIME_LIMIT = 60
 WRITE_LIMIT = 2000
+
+BAD_CALLS = {"exec", "eval"}
+GOOD_IMPORTS = {"pandas", "scipy"}
 
 
 def set_mem_limit():
@@ -36,8 +41,21 @@ def check_unsafe_code(code: str):
 
     Returns True if unsafe, False otherwise
     """
+    tree = ast.parse(code)
+    for i in ast.walk(tree):
+        if isinstance(i, ast.Call) and i.func.id in BAD_CALLS:
+            print(i)
+            return True
+        if isinstance(i, ast.ImportFrom) and module not in GOOD_IMPORTS:
+            print(i)
+            return True
+        if isinstance(i, ast.Import):
+            print(i)
+            for name in i.names:
+                if name.name not in GOOD_IMPORTS:
+                    return True
 
-    return True
+    return False
 
 
 def exec_code_secure(code: str):
@@ -45,6 +63,21 @@ def exec_code_secure(code: str):
     Executes the code in a sandbox and returns the output
     of the code execution
     """
-    set_mem_limit()
-    out = ""
-    return out
+    # set_mem_limit()
+    output = ""
+    try:
+        with open("temp.py", "w") as text_file:
+            text_file.write(code)
+        result = subprocess.run(["python3", "temp.py"], capture_output=True)
+        os.remove("temp.py")
+        output += "======== OUT ========= \n"
+        output += result.stdout.decode("utf-8")
+        output += "\n"
+        output += "======== ERR ========= \n"
+        output += result.stderr.decode("utf-8")
+        output += "\n"
+    except Exception as e:
+        output = "Error in executing code!"
+        print(e)
+
+    return output
