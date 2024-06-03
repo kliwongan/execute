@@ -77,6 +77,9 @@ def exec_code_secure(code: str):
         output += result.stderr.decode("utf-8")
         output += "\n"
     except Exception as e:
+        # Cleanup
+        if os.path.isfile("temp.py"):
+            os.remove("temp.py")
         output = "Error in executing code!"
         print(e)
 
