@@ -46,7 +46,7 @@ def check_unsafe_code(code: str):
         if isinstance(i, ast.Call) and i.func.id in BAD_CALLS:
             print(i)
             return True
-        if isinstance(i, ast.ImportFrom) and module not in GOOD_IMPORTS:
+        if isinstance(i, ast.ImportFrom) and i.module not in GOOD_IMPORTS:
             print(i)
             return True
         if isinstance(i, ast.Import):

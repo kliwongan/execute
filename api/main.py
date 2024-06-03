@@ -66,9 +66,10 @@ async def test_code(params: CodeUpload):
         )
 
     output = exec_code_secure(code)
+
     try:
         persist_code(code, output)
-    except e:
+    except Exception as e:
         raise HTTPException(
             status_code=400,
             detail="Saving to database failed!",

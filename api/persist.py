@@ -15,8 +15,9 @@ def persist(code: str, output: str):
         cursor.execute(
             f"CREATE TABLE IF NOT EXISTS {TABLE_NAME} (id INTEGER, code TEXT, output TEXT, Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP);"
         )
-        cur.execute(
+        cursor.execute(
             f"INSERT INTO {TABLE_NAME} (code, output) VALUES({code}, {output});"
         )
-    except e as Exception:
+    except Exception as e:
+        print(e)
         raise Exception(e)
